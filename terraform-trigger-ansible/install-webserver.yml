@@ -1,0 +1,19 @@
+- name: Install websever on Terraform created EC2 instance
+  remote_user: ec2-user
+  hosts: all
+  become: true
+  vars_files:
+    - vars.yml
+  vars:
+    ansible_ssh_private_key_file: "{{ ssh_key_path }}"
+  tasks:
+    - name: Install Webserver
+      yum: pkg=httpd state=latest
+    - name: Place the index file to web root
+      copy: src=files/index.html dest={{ web_root }}/index.html owner=apache group=apache mode=0644
+    - name: Enable web service
+      service: name=httpd enabled=yes
+      notify: restart web server
+  handlers:
+    - name: restart web server
+      service: name=httpd state=restarted

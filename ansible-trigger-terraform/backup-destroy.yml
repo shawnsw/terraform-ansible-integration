@@ -1,0 +1,22 @@
+---
+- name: main
+  hosts: localhost
+  gather_facts: false
+  connection: local
+  tasks:
+  - name: backup file
+    aws_s3:
+      bucket: ansible-terraform
+      object: file.txt
+      dest: /tmp/file.txt
+      mode: get
+  - name: delete s3 object
+    aws_s3:
+      bucket: ansible-terraform
+      object: file.txt
+      mode: delobj
+  - name: destroy bucket
+    terraform:
+      project_path: terraform/
+      lock: true
+      state: absent

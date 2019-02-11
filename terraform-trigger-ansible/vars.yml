@@ -1,0 +1,2 @@
+ssh_key_path: ~/.ssh/terraform-ansible
+web_root: /var/www/html
